@@ -152,8 +152,7 @@ def process_image():
             return jsonify({"error": "Missing filename or ID type"}), 400 
         if not reader:
             if not os.path.exists(MODEL_CACHE_DIR):
-                print("Downloading SATRNOCR model, please wait...")
-            reader = easyocr.Reader(['en', 'ar'], gpu=False)
+             reader = easyocr.Reader(['en', 'ar'], gpu=False)
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         if not os.path.exists(filepath):
             return jsonify({"error": "Image not found"}), 404
