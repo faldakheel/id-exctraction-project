@@ -14,6 +14,7 @@ app = Flask(__name__)
 CORS(app)
 UPLOAD_FOLDER = 'images'
 DB_FILE = 'local.db'
+MODEL_CACHE_DIR = os.path.expanduser("~/.SATRNOCR")
 
 class RetrainedModel:
     def __init__(self, model_path):
@@ -148,8 +149,11 @@ def process_image():
         reader = easyocr.Reader(['en','ar'], gpu=False)
         id_type = data.get("id_type")
         if not filename or not id_type:
-            return jsonify({"error": "Missing filename or ID type"}), 400
-
+            return jsonify({"error": "Missing filename or ID type"}), 400 
+        if not reader:
+            if not os.path.exists(MODEL_CACHE_DIR):
+                print("Downloading SATRNOCR model, please wait...")
+            reader = easyocr.Reader(['en', 'ar'], gpu=False)
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         if not os.path.exists(filepath):
             return jsonify({"error": "Image not found"}), 404
