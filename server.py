@@ -14,6 +14,7 @@ app = Flask(__name__)
 CORS(app)
 UPLOAD_FOLDER = 'images'
 DB_FILE = 'local.db'
+reader = None
 MODEL_CACHE_DIR = os.path.expanduser("~/.SATRNOCR")
 
 class RetrainedModel:
