@@ -1,0 +1,9 @@
+pillow 
+numpy
+flask
+flask-cors
+easyocr
+opencv-python
+numpy
+easyocr
+pillow
