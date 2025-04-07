@@ -147,7 +147,6 @@ def process_image():
     try:
         data = request.json
         filename = data.get("filename")
-        reader = easyocr.Reader(['en','ar'], gpu=False)
         id_type = data.get("id_type")
         if not filename or not id_type:
             return jsonify({"error": "Missing filename or ID type"}), 400 
