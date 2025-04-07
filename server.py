@@ -11,6 +11,7 @@ from flask import send_from_directory
 import sqlite3
 
 app = Flask(__name__)
+CORS(app)
 UPLOAD_FOLDER = 'images'
 DB_FILE = 'local.db'
 
