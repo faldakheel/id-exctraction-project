@@ -11,32 +11,15 @@ from flask import send_from_directory
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)
+
+# Explicit CORS setup to allow Netlify domain
+CORS(app, resources={r"/upload": {"origins": "https://papaya-elf-00c397.netlify.app"},
+                     r"/process": {"origins": "https://papaya-elf-00c397.netlify.app"}})
+
 UPLOAD_FOLDER = 'images'
 DB_FILE = 'local.db'
 reader = None
 MODEL_CACHE_DIR = os.path.expanduser("~/.SATRNOCR")
-
-class RetrainedModel:
-    def __init__(self, model_path):
-        self.model_path = model_path
-        self.weights = torch.randn((512, 512))
-        self.loaded = False
-
-    def load_model(self):
-        print(f"Initializing model from {self.model_path}...")
-        self.loaded = True
-        print("Model successfully loaded.")
-
-    def preprocess(self, image_path):
-        print("Preprocessing image for inference...")
-        return torch.randn((1, 3, 224, 224))
-
-    def infer(self, tensor):
-        print("Performing inference on input tensor...")
-        return np.random.randint(0, 10, size=(5,))
-
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Initialize DB
 def init_db():
@@ -102,7 +85,6 @@ def init_db():
 
     conn.commit()
     conn.close()
-
 
 @app.route('/images/<path:filename>')
 def serve_image(filename):
@@ -187,6 +169,4 @@ def process_image():
 
 if __name__ == '__main__':
     init_db()
-    CORS(app)
-    app.run(host='0.0.0.0', port=10000)
-    app.run(debug=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=10000, debug=True)
